@@ -42,3 +42,14 @@ void BezierNode::setType(Type type){
 BezierNode::Type BezierNode::getType(){
 	return this->type;
 }
+
+QRectF BezierNode::boundingRect() const {
+	return QRectF(0,0,5,5);
+}
+
+void BezierNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) {
+	painter->drawEllipse(QPoint(0,0),10,10);
+	painter->drawEllipse(QPoint(50,50),5,5);
+	painter->drawEllipse(*point,15,15);
+}
+

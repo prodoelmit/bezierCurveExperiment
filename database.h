@@ -15,6 +15,7 @@ public:
 
 signals:
 	void curvesChanged();
+	void nodeAdded(BezierNode* node);
 public slots:
 	void pointSelectedAt(QPointF clickPoint);
 	void startDragging();

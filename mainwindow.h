@@ -2,10 +2,11 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include "sectionview.h"
+#include "sectionscene.h"
 #include "database.h"
 #include <QLayout>
 #include <QHBoxLayout>
+#include <QGraphicsView>
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -15,7 +16,7 @@ public:
     ~MainWindow();
 private:
 	Database* database;
-	SectionView* sectionView;
+	SectionScene* sectionScene;
 };
 
 #endif // MAINWINDOW_H

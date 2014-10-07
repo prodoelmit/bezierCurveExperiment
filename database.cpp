@@ -62,11 +62,12 @@ void Database::addPoint(BezierCurve::Purpose purpose, QPointF point) {
 	BezierCurve* curve = this->getCurve(purpose);
 	BezierNode* node = new BezierNode(point);
 	curve->appendNode(node);
-	this->selectedPoints.append(&(node->getRightControlPoint()));
-	this->points.append(&(node->getPoint()));
-	this->points.append(&(node->getLeftControlPoint()));
-	this->points.append(&(node->getRightControlPoint()));
-	emit curvesChanged();
+	emit nodeAdded(node);
+//	this->selectedPoints.append(&(node->getRightControlPoint()));
+//	this->points.append(&(node->getPoint()));
+//	this->points.append(&(node->getLeftControlPoint()));
+//	this->points.append(&(node->getRightControlPoint()));
+//	emit curvesChanged();
 }
 
 BezierCurve* Database::getCurve(BezierCurve::Purpose purpose) {
