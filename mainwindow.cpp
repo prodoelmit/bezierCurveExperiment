@@ -12,6 +12,7 @@ MainWindow::MainWindow(QWidget *parent)
 	setCentralWidget(mainWidget);
 	mainWidget->setLayout(mainLayout);
 	QGraphicsView* view = new QGraphicsView(sectionScene);
+	view->setMouseTracking(true);
 	mainLayout->addWidget(view);
 }
 

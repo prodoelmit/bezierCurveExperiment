@@ -7,6 +7,8 @@
 #include <QVector2D>
 #include "beziercurve.h"
 #include <QGraphicsSceneMouseEvent>
+#include <QGraphicsView>
+#include <QTransform>
 class SectionScene : public QGraphicsScene
 {
 	Q_OBJECT
@@ -22,14 +24,12 @@ signals:
 	void selectAt(QPointF point);
 	void nodeAdded(BezierCurve::Purpose purpose, QPointF point);
 	void pointAdded(BezierCurve::Purpose purpose, QPointF point);
+
 public slots:
 	void addNode(BezierNode* node);
 
 private:
 	void mousePressEvent(QGraphicsSceneMouseEvent* e);
-	void mouseMoveEvent(QMouseEvent* e);
-	void mouseReleaseEvent(QMouseEvent* e);
-
 	Database* database;
 };
 

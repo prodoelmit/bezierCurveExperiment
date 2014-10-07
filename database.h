@@ -17,19 +17,10 @@ signals:
 	void curvesChanged();
 	void nodeAdded(BezierNode* node);
 public slots:
-	void pointSelectedAt(QPointF clickPoint);
-	void startDragging();
-	void dragPoints(QPointF translation);
-	void stopDragging();
-	void cancelDragging();
 	void addPoint(BezierCurve::Purpose purpose, QPointF point);
 private:
-	bool draggingEnabled;
 	BezierCurve* skinCurve;
 	BezierCurve* frameCurve;
-	QList<QPointF*> selectedPoints;
-	QList<QPointF*> backupPoints;
-	QList<QPointF*> points;
 };
 
 #endif // DATABASE_H

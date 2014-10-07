@@ -1,12 +1,15 @@
 #include "beziernode.h"
 
 BezierNode::BezierNode(QPointF point, QObject *parent) :
-	QObject(parent)
+	QObject(parent), QGraphicsItem()
 {
+	this->setFlags(ItemIsMovable | ItemIsFocusable);
 	this->point = new QPointF(point);
 	this->leftControlPoint = new QPointF(point);
 	this->rightControlPoint = new QPointF(point);
 	this->type = Symmetric;
+	this->setAcceptHoverEvents(true);
+	this->setAcceptedMouseButtons(Qt::LeftButton);
 }
 
 QPointF& BezierNode::getPoint(){
@@ -44,12 +47,35 @@ BezierNode::Type BezierNode::getType(){
 }
 
 QRectF BezierNode::boundingRect() const {
-	return QRectF(0,0,5,5);
+	qreal tolerance = 15;
+	QPointF leftTop(point->x() - tolerance, point->y() + tolerance);
+	QPointF rightBottom(point->x() + tolerance, point->y() - tolerance);
+	return QRectF(leftTop,rightBottom);
 }
 
 void BezierNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) {
-	painter->drawEllipse(QPoint(0,0),10,10);
-	painter->drawEllipse(QPoint(50,50),5,5);
+	if (hovered) {
+		painter->setBrush(QBrush(QColor("black")));
+	}
 	painter->drawEllipse(*point,15,15);
+	this->scene()->update();
 }
+
+void BezierNode::hoverEnterEvent(QGraphicsSceneHoverEvent * event) {
+//	this->hovered = true;
+	this->update();
+}
+
+QPainterPath BezierNode::shape() const {
+	QPainterPath path;
+	path.setFillRule(Qt::WindingFill);
+	path.addEllipse(boundingRect());
+	return path;
+}
+
+void BezierNode::mousePressEvent(QGraphicsSceneMouseEvent *event) {
+	this->hovered = true;
+	update();
+}
+
 
