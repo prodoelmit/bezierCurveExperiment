@@ -5,14 +5,15 @@ MainWindow::MainWindow(QWidget *parent)
 {
 	this->database = new Database;
 	this->sectionScene = new SectionScene(database);
-//	database->addPoint(BezierCurve::Skin, QPointF(0,0));
-//	database->addPoint(BezierCurve::Skin, QPointF(1,1));
+	database->addCurve();
+	database->focusCurve(database->curveList().first());
+	BezierCurve* curve = database->currentCurve();
 	QWidget* mainWidget = new QWidget;
 	QHBoxLayout* mainLayout = new QHBoxLayout;
 	setCentralWidget(mainWidget);
 	mainWidget->setLayout(mainLayout);
 	QGraphicsView* view = new QGraphicsView(sectionScene);
-	view->setMouseTracking(true);
+//	view->setMouseTracking(true);
 	mainLayout->addWidget(view);
 }
 

@@ -1,81 +1,89 @@
 #include "beziernode.h"
 
-BezierNode::BezierNode(QPointF point, QObject *parent) :
-	QObject(parent), QGraphicsItem()
+BezierNode::BezierNode(QPointF point, Type type) : QGraphicsItem()
 {
-	this->setFlags(ItemIsMovable | ItemIsFocusable);
-	this->point = new QPointF(point);
-	this->leftControlPoint = new QPointF(point);
-	this->rightControlPoint = new QPointF(point);
-	this->type = Symmetric;
-	this->setAcceptHoverEvents(true);
-	this->setAcceptedMouseButtons(Qt::LeftButton);
-}
-
-QPointF& BezierNode::getPoint(){
-	return *(this->point);
-}
-
-QPointF& BezierNode::getLeftControlPoint() {
-	return *(this->leftControlPoint);
-}
-QPointF& BezierNode::getRightControlPoint() {
-	return *(this->rightControlPoint);
-}
-
-void BezierNode::setPoint(QPointF point){
-	delete this->point;
-	this->point = new QPointF(point);
-}
-
-void BezierNode::setLeftControlPoint(QPointF leftCP){
-	delete this->leftControlPoint;
-	this->leftControlPoint = new QPointF(leftCP);
-}
-
-void BezierNode::setRightControlPoint(QPointF rightCP){
-	delete this->rightControlPoint;
-	this->rightControlPoint = new QPointF(rightCP);
-}
-
-void BezierNode::setType(Type type){
-	this->type = type;
-}
-
-BezierNode::Type BezierNode::getType(){
-	return this->type;
-}
-
-QRectF BezierNode::boundingRect() const {
-	qreal tolerance = 15;
-	QPointF leftTop(point->x() - tolerance, point->y() + tolerance);
-	QPointF rightBottom(point->x() + tolerance, point->y() - tolerance);
-	return QRectF(leftTop,rightBottom);
-}
-
-void BezierNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) {
-	if (hovered) {
-		painter->setBrush(QBrush(QColor("black")));
+	m_point = point;
+	m_type = type;
+	if (type == Symmetric) {
+		BezierControlPoint* leftControlPoint = new BezierControlPoint(point - QPoint(30,0),this);
+		BezierControlPoint* rightControlPoint = new BezierControlPoint(point + QPoint(30,0),this);
+		setLeftControlPoint(leftControlPoint);
+		setRightControlPoint(rightControlPoint);
 	}
-	painter->drawEllipse(*point,15,15);
-	this->scene()->update();
+//	setFlags(ItemIsMovable);
 }
 
-void BezierNode::hoverEnterEvent(QGraphicsSceneHoverEvent * event) {
-//	this->hovered = true;
-	this->update();
+void BezierNode::setPoint(QPointF point)
+{
+	m_point = point;
 }
 
-QPainterPath BezierNode::shape() const {
+QPointF &BezierNode::point()
+{
+	return m_point;
+}
+
+void BezierNode::setLeftControlPoint(BezierControlPoint* leftControlPoint)
+{
+	m_leftControlPoint = leftControlPoint;
+}
+
+BezierControlPoint *BezierNode::leftControlPoint()
+{
+	return m_leftControlPoint;
+}
+
+
+void BezierNode::setRightControlPoint(BezierControlPoint* rightControlPoint)
+{
+	m_rightControlPoint = rightControlPoint;
+}
+
+BezierControlPoint *BezierNode::rightControlPoint()
+{
+	return m_rightControlPoint;
+}
+
+void BezierNode::setType(BezierNode::Type type)
+{
+	m_type = type;
+}
+
+BezierNode::Type BezierNode::type()
+{
+	return m_type;
+}
+
+QRectF BezierNode::boundingRect() const
+{
+	qreal size = 7;
+	QPointF topLeft = m_point - QPointF(size,-size);
+	QPointF bottomRight = m_point + QPointF(size, -size);
+	return QRectF(topLeft,bottomRight);
+}
+
+void BezierNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+{
+	painter->drawEllipse(boundingRect());
+}
+
+QPainterPath BezierNode::shape() const
+{
+
 	QPainterPath path;
-	path.setFillRule(Qt::WindingFill);
 	path.addEllipse(boundingRect());
-	return path;
 }
 
-void BezierNode::mousePressEvent(QGraphicsSceneMouseEvent *event) {
-	this->hovered = true;
-	update();
+//void BezierNode::mousePressEvent(QGraphicsSceneMouseEvent *event) {
+//	QGraphicsItem::mousePressEvent(event);
+//}
+
+//void BezierNode::dragEnterEvent(QGraphicsSceneDragDropEvent *event) {
+//	QGraphicsItem::dragEnterEvent(event);
+//}
+
+bool BezierNode::sceneEvent(QEvent *event) {
+
 }
 
 

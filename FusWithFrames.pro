@@ -17,10 +17,12 @@ SOURCES += main.cpp\
     beziernode.cpp \
     beziercurve.cpp \
     database.cpp \
-    sectionscene.cpp
+    sectionscene.cpp \
+    beziercontrolpoint.cpp
 
 HEADERS  += mainwindow.h \
     beziernode.h \
     beziercurve.h \
     database.h \
-    sectionscene.h
+    sectionscene.h \
+    beziercontrolpoint.h

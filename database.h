@@ -6,21 +6,24 @@
 #include "beziernode.h"
 #include "beziercurve.h"
 #include <QVector2D>
+class BezierCurve;
 class Database : public QObject
 {
 	Q_OBJECT
 public:
 	explicit Database(QObject *parent = 0);
-	BezierCurve* getCurve(BezierCurve::Purpose purpose);
-
+	QList<BezierCurve*> curveList();
+	BezierCurve* currentCurve();
 signals:
-	void curvesChanged();
-	void nodeAdded(BezierNode* node);
+	void curveFocus(BezierCurve* curve);
+	void nodeAdd(BezierNode* node);
 public slots:
-	void addPoint(BezierCurve::Purpose purpose, QPointF point);
+	void addNode(BezierNode* node);
+	void addCurve();
+	void focusCurve(BezierCurve* curve);
 private:
-	BezierCurve* skinCurve;
-	BezierCurve* frameCurve;
+	QList<BezierCurve*> m_curveList;
+	BezierCurve* m_currentCurve;
 };
 
 #endif // DATABASE_H

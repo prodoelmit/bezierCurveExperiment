@@ -2,8 +2,9 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include "sectionscene.h"
 #include "database.h"
+#include "sectionscene.h"
+#include "beziercurve.h"
 #include <QLayout>
 #include <QHBoxLayout>
 #include <QGraphicsView>

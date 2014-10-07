@@ -9,34 +9,40 @@
 #include <QRectF>
 #include <QPainter>
 #include <QPainterPathStroker>
-class BezierNode : public QObject, public QGraphicsItem
+#include "beziercontrolpoint.h"
+class BezierControlPoint;
+class BezierNode : public QGraphicsItem
 {
-    Q_OBJECT
 	Q_INTERFACES(QGraphicsItem)
 public:
 	enum Type {Symmetric, Smooth, Angular};
-	explicit BezierNode(QPointF point, QObject *parent = 0);
-	QPointF& getPoint();
-	QPointF& getLeftControlPoint();
-	QPointF& getRightControlPoint();
-	void setPoint(QPointF);
-	void setLeftControlPoint(QPointF);
-	void setRightControlPoint(QPointF);
+	BezierNode(QPointF point = QPointF(0,0), Type type = Symmetric);
+	void setPoint(QPointF point);
+	QPointF& point();
+	void setLeftControlPoint(BezierControlPoint*);
+	BezierControlPoint* leftControlPoint();
+	void setRightControlPoint(BezierControlPoint*);
+	BezierControlPoint* rightControlPoint();
 	void setType(Type);
-	Type getType();
+	Type type();
+
 	QRectF boundingRect() const;
 	void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
-
-	void hoverEnterEvent(QGraphicsSceneHoverEvent * event);
 	QPainterPath shape() const;
-	void mousePressEvent(QGraphicsSceneMouseEvent *event);
+
+
+
+public slots:
+//	void mousePressEvent(QGraphicsSceneMouseEvent *event);
+	//	void dragEnterEvent(QGraphicsSceneDragDropEvent *event);
+	bool sceneEvent(QEvent *event);
 private:
-	QPointF* point;
-	QPointF* leftControlPoint;
-	QPointF* rightControlPoint;
-	Type type;
-	bool selected = false;
-	bool hovered = false;
+	QPointF m_point;
+	BezierControlPoint* m_leftControlPoint;
+	BezierControlPoint* m_rightControlPoint;
+	Type m_type;
+	bool m_selected = false;
+	bool m_hovered = false;
 };
 
 #endif // BEZIERNODE_H

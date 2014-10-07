@@ -3,34 +3,33 @@
 Database::Database(QObject *parent) :
 	QObject(parent)
 {
-	this->skinCurve = new BezierCurve;
-	this->frameCurve = new BezierCurve;
-//	BezierNode* firstNode = new BezierNode(QPointF(0,0));
-//	skinCurve->appendNode(firstNode);
+	m_curveList = QList<BezierCurve*>();
 }
 
-
-void Database::addPoint(BezierCurve::Purpose purpose, QPointF point) {
-	BezierCurve* curve = this->getCurve(purpose);
-	BezierNode* node = new BezierNode(point);
-	curve->appendNode(node);
-	emit nodeAdded(node);
-//	this->selectedPoints.append(&(node->getRightControlPoint()));
-//	this->points.append(&(node->getPoint()));
-//	this->points.append(&(node->getLeftControlPoint()));
-//	this->points.append(&(node->getRightControlPoint()));
-//	emit curvesChanged();
+QList<BezierCurve *> Database::curveList()
+{
+	return m_curveList;
 }
 
-BezierCurve* Database::getCurve(BezierCurve::Purpose purpose) {
-	BezierCurve* curve;
-	switch (purpose) {
-		case BezierCurve::Frame:
-			curve = frameCurve;
-			break;
-		case BezierCurve::Skin:
-			curve = skinCurve;
-			break;
-	}
-	return curve;
+BezierCurve *Database::currentCurve()
+{
+	return m_currentCurve;
 }
+
+void Database::addNode(BezierNode *node)
+{
+	emit nodeAdd(node);
+}
+
+void Database::addCurve()
+{
+	BezierCurve* curve = new BezierCurve(this);
+	m_curveList.append(curve);
+}
+
+void Database::focusCurve(BezierCurve *curve)
+{
+	m_currentCurve = curve;
+	emit curveFocus(m_currentCurve);
+}
+
